@@ -1,0 +1,40 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    View All Payments
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <p><a href="{% url 'admin_home' %}" class="btn btn-success">Return to Admin Home</a></p>
+    <h4>Payments</h4>
+    <p>Logged in as: {{ user.username }}</p>
+
+    {% if payments %}
+        <table class="table-bordered">
+            <tr>
+                <th>Sender</th>
+                <th>Sender Currency</th>
+                <th>Amount Sent</th>
+                <th>Receiver</th>
+                <th>Receiver Currency</th>
+                <th>Amount Received</th>
+                <th>Date</th>
+            </tr>
+            {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.sender.email }}</td>
+                    <td>{{ payment.sender_currency }}</td>
+                    <td>{{ payment.amount_sent }}</td>
+                    <td>{{ payment.receiver.email }}</td>
+                    <td>{{ payment.receiver_currency }}</td>
+                    <td>{{ payment.amount_received }}</td>
+                    <td>{{ payment.transaction_created_at }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No payments available.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    Online Payment Service Homepage
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Online Payment Service Homepage</h1>
+    {% if user.is_authenticated %}
+        <p>You are logged in as {{ user.username }}</p>
+        <p>Currency: {{ accountDetails.currency }}</p>
+        <p>Current Balance: {{ accountDetails.balance }}</p>
+
+        <h4>Notifications</h4>
+        <h5>Received Requests Pending</h5>
+        {% if requests_pending %}
+            <table class="table-bordered">
+                <tr>
+                    <th>Request From</th>
+                    <th>Amount Requested</th>
+                    <th>Requester Currency</th>
+                    <th>Amount to Send</th>
+                    <th>Your Currency</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Manage Request</th>
+                </tr>
+                {% for request in requests_pending %}
+                    <tr>
+                        <td>{{ request.requester.email }}</td>
+                        <td>{{ request.amount_to_receive }}</td>
+                        <td>{{ request.requester_currency }}</td>
+                        <td>{{ request.amount_to_send }}</td>
+                        <td>{{ request.requested_from_currency }}</td>
+                        <td>{{ request.transaction_created_at }}</td>
+                        <td>{{ request.current_status }}</td>
+                        <td>
+                            <a href="{% url 'accept_request' request.id %}" class="btn btn-success">Accept</a>
+                            <a href="{% url 'reject_request' request.id %}" class="btn btn-success">Reject</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No received requests currently pending.</p>
+        {% endif %}
+        <br>
+        <h5>Recent Payments Received</h5>
+        {% if recent_payments_received %}
+            <table class="table-bordered">
+                <tr>
+                    <th>Payment From</th>
+                    <th>Amount Sent</th>
+                    <th>Sender Currency</th>
+                    <th>Amount Received</th>
+                    <th>Receiver Currency</th>
+                    <th>Date</th>
+                </tr>
+                {% for payment in recent_payments_received %}
+                    <tr>
+                        <td>{{ payment.sender.email }}</td>
+                        <td>{{ payment.amount_sent }}</td>
+                        <td>{{ payment.sender_currency }}</td>
+                        <td>{{ payment.amount_received }}</td>
+                        <td>{{ payment.receiver_currency }}</td>
+                        <td>{{ payment.transaction_created_at }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No payments recently received.</p>
+        {% endif %}
+
+    {% else %}
+        <h5>Please log in or register.</h5>
+    {% endif %}
+{% endblock %}

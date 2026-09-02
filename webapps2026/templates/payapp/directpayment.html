@@ -1,0 +1,18 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    Direct Payments Between User Accounts
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h4>Direct Payment</h4>
+    <p>Logged in as: {{ user.username }}</p>
+    <p>Current balance: {{ accountDetails.balance }} {{ accountDetails.currency }}</p>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Transfer</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    View Payment History
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h4>Payment History</h4>
+    <p>Logged in as: {{ user.username }}</p>
+    <p>Current balance: {{ accountDetails.balance }} {{ accountDetails.currency }}</p>
+
+    {% if sent_payments %}
+        <table class="table-bordered">
+            <tr>
+                <th>Payment To</th>
+                <th>Amount Sent</th>
+                <th>Sender Currency</th>
+                <th>Amount Received</th>
+                <th>Receiver Currency</th>
+                <th>Date</th>
+            </tr>
+            {% for payment in sent_payments %}
+                <tr>
+                    <td>{{ payment.receiver.email }}</td>
+                    <td>{{ payment.amount_sent }}</td>
+                    <td>{{ payment.sender_currency }}</td>
+                    <td>{{ payment.amount_received }}</td>
+                    <td>{{ payment.receiver_currency }}</td>
+                    <td>{{ payment.transaction_created_at }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No payments have been sent.</p>
+    {% endif %}
+    <br>
+    {% if received_payments %}
+        <table class="table-bordered">
+            <tr>
+                <th>Payment From</th>
+                <th>Amount Sent</th>
+                <th>Sender Currency</th>
+                <th>Amount Received</th>
+                <th>Receiver Currency</th>
+                <th>Date</th>
+            </tr>
+            {% for payment in received_payments %}
+                <tr>
+                    <td>{{ payment.sender.email }}</td>
+                    <td>{{ payment.amount_sent }}</td>
+                    <td>{{ payment.sender_currency }}</td>
+                    <td>{{ payment.amount_received }}</td>
+                    <td>{{ payment.receiver_currency }}</td>
+                    <td>{{ payment.transaction_created_at }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No payments have been received.</p>
+    {% endif %}
+{% endblock %}

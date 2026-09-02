@@ -1,0 +1,40 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    View All Requests
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <p><a href="{% url 'admin_home' %}" class="btn btn-success">Return to Admin Home</a></p>
+    <h4>Requests</h4>
+    <p>Logged in as: {{ user.username }}</p>
+
+    {% if requests %}
+        <table class="table-bordered">
+            <tr>
+                <th>Request To</th>
+                <th>Amount Requested</th>
+                <th>Requester Currency</th>
+                <th>Amount To Send</th>
+                <th>Requested From's Currency</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+            {% for request in requests %}
+                <tr>
+                    <td>{{ request.requester.email }}</td>
+                    <td>{{ request.amount_to_receive }}</td>
+                    <td>{{ request.requester_currency }}</td>
+                    <td>{{ request.amount_to_send }}</td>
+                    <td>{{ request.requested_from_currency }}</td>
+                    <td>{{ request.transaction_created_at }}</td>
+                    <td>{{ request.current_status }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No Requests available.</p>
+    {% endif %}
+{% endblock %}

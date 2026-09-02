@@ -1,0 +1,75 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    View Requests History
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h4>Request History</h4>
+    <p>Logged in as: {{ user.username }}</p>
+    <p>Current balance: {{ accountDetails.balance }} {{ accountDetails.currency }}</p>
+
+    {% if sent_requests %}
+        <table class="table-bordered">
+            <tr>
+                <th>Request To</th>
+                <th>Amount Requested</th>
+                <th>Requester Currency</th>
+                <th>Amount To Send</th>
+                <th>Requested From's Currency</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+            {% for request in sent_requests %}
+                <tr>
+                    <td>{{ request.requested_from.email }}</td>
+                    <td>{{ request.amount_to_receive }}</td>
+                    <td>{{ request.requester_currency }}</td>
+                    <td>{{ request.amount_to_send }}</td>
+                    <td>{{ request.requested_from_currency }}</td>
+                    <td>{{ request.transaction_created_at }}</td>
+                    <td>{{ request.current_status }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No payment requests have been sent.</p>
+    {% endif %}
+    <br>
+    {% if received_requests %}
+        <table class="table-bordered">
+            <tr>
+                <th>Request From</th>
+                <th>Amount Requested</th>
+                <th>Requester Currency</th>
+                <th>Amount to Send</th>
+                <th>Your Currency</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Manage Request</th>
+            </tr>
+            {% for request in received_requests %}
+                <tr>
+                    <td>{{ request.requester.email }}</td>
+                    <td>{{ request.amount_to_receive }}</td>
+                    <td>{{ request.requester_currency }}</td>
+                    <td>{{ request.amount_to_send }}</td>
+                    <td>{{ request.requested_from_currency }}</td>
+                    <td>{{ request.transaction_created_at }}</td>
+                    <td>{{ request.current_status }}</td>
+                    <td>{%  if request.current_status == "PENDING" %}
+                        <a href="{% url 'accept_request' request.id %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'reject_request' request.id %}" class="btn btn-success">Reject</a>
+                        {% else %}
+                            No Managing Available
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No payment requests have been received.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    View All Accounts
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <p><a href="{% url 'admin_home' %}" class="btn btn-success">Return to Admin Home</a></p>
+    <h4>User Accounts</h4>
+    <p>Logged in as: {{ user.username }}</p>
+
+    {% if user_accounts %}
+        <table class="table-bordered">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Currency</th>
+                <th>Balance</th>
+            </tr>
+            {% for user_account in user_accounts %}
+                <tr>
+                    <td>{{ user_account.user.username }}</td>
+                    <td>{{ user_account.user.email }}</td>
+                    <td>{{ user_account.currency }}</td>
+                    <td>{{ user_account.balance }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No user accounts available.</p>
+    {% endif %}
+{% endblock %}

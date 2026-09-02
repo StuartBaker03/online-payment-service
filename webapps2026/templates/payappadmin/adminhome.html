@@ -1,0 +1,21 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    PayApp Admin Homepage
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the PayApp Admin Homepage</h1>
+    {% if user.is_authenticated %}
+        <p>You are logged in as {{ user.username }}</p>
+
+        <ul>
+            <li><a href="{% url 'admin_view_accounts' %}">View all user accounts</a></li>
+            <li><a href="{% url 'admin_view_payments' %}">View all payments</a></li>
+            <li><a href="{% url 'admin_view_requests' %}">View all payment requests</a></li>
+            <li><a href="{% url 'register_admin' %}">Register a new admin</a></li>
+        </ul>
+    {% else %}
+        <h5>Please log in or register.</h5>
+    {% endif %}
+{% endblock %}
